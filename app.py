@@ -14,7 +14,24 @@ DELIVERY_TARIFFS = {
     "Дальневосточный": 85,
 }
 
-DENSITY = {"SBR": 1100, "SBR+EPDM": 1400}
+# Фиксированные размеры плитки: 50x50 см = 0.25 м²
+TILE_AREA_M2 = 0.25
+
+# Вес одной плитки (кг) в зависимости от толщины
+WEIGHT_PER_TILE = {
+    "20": 4.24,
+    "25": 5.30,   # промежуточное значение (не использовалось, но добавим на всякий случай)
+    "30": 6.50,
+    "35": 7.13,   # интерполяция
+    "40": 7.75,
+}
+
+# Цена за м² в зависимости от материала и толщины (базовая формула)
+def get_base_price(material: str, thickness_mm: int) -> float:
+    if material == "SBR":
+        return 1200 + (thickness_mm - 20) * 30
+    else:
+        return 1800 + (thickness_mm - 20) * 50
 
 FORM_HTML = """
 <!DOCTYPE html>
@@ -239,20 +256,14 @@ FORM_HTML = """
                         <input type="number" name="tile_count" min="1" max="1000" value="1" required>
                     </div>
                     <div class="input-group">
-                        <label>Длина плитки (см)</label>
-                        <input type="number" step="1" name="tile_length_cm" value="50" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Ширина плитки (см)</label>
-                        <input type="number" step="1" name="tile_width_cm" value="50" required>
+                        <label>Размер плитки</label>
+                        <input type="text" value="50 x 50 см" readonly disabled style="background:#2c251c; color:#f5e6d3;">
                     </div>
                     <div class="input-group">
                         <label>Толщина (мм)</label>
                         <select name="thickness_mm">
                             <option value="20">20 мм</option>
-                            <option value="25">25 мм</option>
                             <option value="30" selected>30 мм</option>
-                            <option value="35">35 мм</option>
                             <option value="40">40 мм</option>
                         </select>
                     </div>
@@ -421,8 +432,9 @@ RESULT_HTML = """
         <h1>FLEXTILE</h1>
         <div class="sub">// детализация</div>
         <div class="result-row"><span>📦 Количество плиток</span><span>{tile_count} шт</span></div>
-        <div class="result-row"><span>📐 Площадь (м²)</span><span>{area} м²</span></div>
-        <div class="result-row"><span>⚖️ Вес (прим.)</span><span>{weight} кг</span></div>
+        <div class="result-row"><span>📐 Размер плитки</span><span>50 x 50 см</span></div>
+        <div class="result-row"><span>📐 Общая площадь</span><span>{area} м²</span></div>
+        <div class="result-row"><span>⚖️ Общий вес</span><span>{total_weight} кг</span></div>
         <div class="result-row"><span>🧱 Материал</span><span>{material}</span></div>
         <div class="result-row"><span>🎨 Пигмент</span><span>{pigment}</span></div>
         <div class="result-row"><span>📏 Толщина</span><span>{thickness} мм</span></div>
@@ -443,35 +455,33 @@ async def form():
 @app.post("/calculate", response_class=HTMLResponse)
 async def calculate(
     tile_count: int = Form(...),
-    tile_length_cm: float = Form(...),
-    tile_width_cm: float = Form(...),
     thickness_mm: str = Form(...),
     pigment: str = Form(...),
     material: str = Form(...),
     region: str = Form(...)
 ):
-    tile_area_m2 = (tile_length_cm * tile_width_cm) / 10000.0
-    total_area_m2 = tile_count * tile_area_m2
     thickness_int = int(thickness_mm)
-    thickness_m = thickness_int / 1000.0
+    # Общая площадь
+    total_area_m2 = tile_count * TILE_AREA_M2
 
-    if material == "SBR":
-        base_price = 1200 + (thickness_int - 20) * 30
-        density = DENSITY["SBR"]
-    else:
-        base_price = 1800 + (thickness_int - 20) * 50
-        density = DENSITY["SBR+EPDM"]
-
+    # Стоимость материала
+    base_price = get_base_price(material, thickness_int)
     material_cost = total_area_m2 * base_price
-    weight_kg = total_area_m2 * thickness_m * density
+
+    # Вес
+    weight_per_tile = WEIGHT_PER_TILE.get(thickness_mm, 6.5)  # по умолчанию 30 мм
+    total_weight_kg = tile_count * weight_per_tile
+
+    # Доставка
     tariff = DELIVERY_TARIFFS.get(region, 50)
-    delivery_cost = weight_kg * tariff if tariff > 0 else 0
+    delivery_cost = total_weight_kg * tariff if tariff > 0 else 0
+
     total = material_cost + delivery_cost
 
     return RESULT_HTML.format(
         tile_count=tile_count,
         area=round(total_area_m2, 2),
-        weight=round(weight_kg, 1),
+        total_weight=round(total_weight_kg, 1),
         material="SBR+EPDM" if material == "SBR+EPDM" else "SBR",
         pigment=pigment,
         thickness=thickness_mm,

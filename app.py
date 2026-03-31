@@ -28,7 +28,7 @@ FORM_HTML = """
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: radial-gradient(circle at 20% 40%, #221c0c, #050301);
+            background: radial-gradient(circle at 20% 40%, #0a0502, #020100);
             font-family: 'Heebo', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -36,21 +36,22 @@ FORM_HTML = """
             align-items: center;
             padding: 2rem;
             position: relative;
+            overflow-x: hidden;
         }
 
         .spotlight {
             position: fixed;
             border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.35;
-            background: radial-gradient(circle, rgba(255,240,180,0.8) 0%, rgba(255,200,100,0) 80%);
+            filter: blur(70px);
+            opacity: 0.3;
+            background: radial-gradient(circle, rgba(255,220,150,0.7) 0%, rgba(255,180,80,0) 80%);
             pointer-events: none;
             z-index: 1;
         }
-        .spotlight:nth-child(1) { width: 500px; height: 500px; top: -150px; left: -150px; }
-        .spotlight:nth-child(2) { width: 700px; height: 700px; bottom: -200px; right: -200px; opacity: 0.3; filter: blur(90px); }
-        .spotlight:nth-child(3) { width: 400px; height: 400px; top: 20%; right: 10%; opacity: 0.2; filter: blur(70px); }
-        .spotlight:nth-child(4) { width: 600px; height: 600px; bottom: 10%; left: 20%; opacity: 0.2; filter: blur(100px); }
+        .spotlight:nth-child(1) { width: 600px; height: 600px; top: -200px; left: -200px; opacity: 0.4; }
+        .spotlight:nth-child(2) { width: 800px; height: 800px; bottom: -300px; right: -200px; opacity: 0.25; filter: blur(100px); }
+        .spotlight:nth-child(3) { width: 450px; height: 450px; top: 30%; right: 5%; opacity: 0.2; filter: blur(80px); }
+        .spotlight:nth-child(4) { width: 550px; height: 550px; bottom: 20%; left: -100px; opacity: 0.2; filter: blur(90px); }
 
         body::after {
             content: "";
@@ -59,10 +60,10 @@ FORM_HTML = """
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjgiIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMjUiLz48L3N2Zz4=');
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMTgiLz48L3N2Zz4=');
             background-repeat: repeat;
-            opacity: 0.15;
             pointer-events: none;
+            z-index: 2;
         }
 
         .vignette {
@@ -71,8 +72,9 @@ FORM_HTML = """
             left: 0;
             width: 100%;
             height: 100%;
-            box-shadow: inset 0 0 150px 50px rgba(0,0,0,0.6);
+            box-shadow: inset 0 0 180px 70px rgba(0,0,0,0.7);
             pointer-events: none;
+            z-index: 2;
         }
 
         .container {
@@ -80,89 +82,94 @@ FORM_HTML = """
             max-width: 1100px;
             position: relative;
             z-index: 10;
-            animation: fadeInUp 0.8s ease;
+            animation: fadeInUp 0.9s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
+            from { opacity: 0; transform: translateY(50px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .hero {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
         }
         .hero h1 {
             font-family: 'Heebo', sans-serif;
             font-weight: 900;
-            font-size: clamp(4rem, 14vw, 12rem);
-            background: linear-gradient(135deg, #ecd9b4, #b88b4a, #7a5a3a);
+            font-size: clamp(4.5rem, 15vw, 13rem);
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #f5e6d3, #dbb87a, #b88b4a);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 15px rgba(0,0,0,0.5);
+            text-shadow: 0 0 25px rgba(200,150,80,0.3);
             line-height: 1;
             margin: 0;
+            transform: scaleY(0.98);
         }
         .hero .sub {
             font-family: 'Heebo', sans-serif;
             font-weight: 300;
-            font-size: 0.9rem;
-            letter-spacing: 8px;
+            font-size: 0.85rem;
+            letter-spacing: 10px;
             text-transform: uppercase;
             color: #d6b575;
             margin-top: -1rem;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.45);
             display: inline-block;
-            padding: 0 1rem;
+            padding: 0.3rem 1.5rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
         }
 
         .card {
-            background: rgba(10, 10, 12, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 48px;
-            padding: 2rem;
+            background: rgba(8, 7, 5, 0.65);
+            backdrop-filter: blur(16px);
+            border-radius: 56px;
+            padding: 2.2rem;
             border: 1px solid rgba(200, 170, 110, 0.5);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,200,0.1);
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,245,200,0.1);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 1.6rem;
         }
         .input-group {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
         label {
             display: block;
             font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             color: #e6d5b3;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
             font-weight: 500;
         }
         input, select {
             width: 100%;
-            background: #1e1a12;
+            background: #1f1b12;
             border: 1px solid #b88b4a;
-            padding: 12px 16px;
+            padding: 12px 18px;
             font-size: 0.95rem;
             border-radius: 60px;
             outline: none;
-            color: #f0e5d0;
+            color: #f5e6d3;
             font-family: monospace;
-            transition: 0.2s;
+            transition: all 0.2s;
         }
         input:focus, select:focus {
             border-color: #e6b86e;
             box-shadow: 0 0 12px #c9a258;
-            background: #2a241a;
+            background: #2c251c;
         }
         .radio-group {
             display: flex;
-            gap: 1.8rem;
+            gap: 2rem;
             flex-wrap: wrap;
             align-items: center;
             margin-top: 0.5rem;
@@ -171,58 +178,44 @@ FORM_HTML = """
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: normal;
             text-transform: none;
+            color: #e6d5b3;
         }
+        .radio-group input {
+            width: auto;
+            margin-right: 5px;
+        }
+
         button {
-            background: linear-gradient(90deg, #b88b4a, #7a5a3a);
+            background: linear-gradient(95deg, #b88b4a, #7a5a3a);
             border: none;
-            padding: 14px 28px;
+            padding: 15px 32px;
             width: 100%;
             font-size: 1rem;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             color: #0f0b06;
             border-radius: 60px;
             cursor: pointer;
-            margin-top: 1.5rem;
-            transition: 0.2s;
+            margin-top: 1.8rem;
+            transition: all 0.25s;
+            font-family: monospace;
         }
         button:hover {
-            background: linear-gradient(90deg, #d6a15c, #9b6e42);
-            letter-spacing: 4px;
-            box-shadow: 0 0 15px #b88b4a;
+            background: linear-gradient(95deg, #d6a15c, #9b6e42);
+            letter-spacing: 5px;
+            box-shadow: 0 0 20px #b88b4a;
             transform: scale(0.98);
         }
 
-        .music-player {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .music-btn {
-            background: rgba(184, 139, 74, 0.2);
-            border: 1px solid #b88b4a;
-            padding: 8px 30px;
-            border-radius: 60px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            color: #f2e2c0;
-            transition: 0.2s;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-        .music-btn.active, .music-btn:hover {
-            background: #b88b4a;
-            color: #0a0703;
-            box-shadow: 0 0 8px #e6b86e;
-        }
-
         @media (max-width: 700px) {
-            body { padding: 1rem; }
+            body { padding: 1.2rem; }
             .card { padding: 1.5rem; }
-            .hero .sub { letter-spacing: 4px; font-size: 0.7rem; }
+            .hero .sub { letter-spacing: 5px; font-size: 0.7rem; }
+            .form-grid { gap: 1rem; }
         }
     </style>
 </head>
@@ -236,7 +229,7 @@ FORM_HTML = """
     <div class="container">
         <div class="hero">
             <h1>FLEXTILE</h1>
-            <div class="sub">студия резины</div>
+            <div class="sub">резиновая студия</div>
         </div>
         <div class="card">
             <form action="/calculate" method="post">
@@ -296,43 +289,8 @@ FORM_HTML = """
                 </div>
                 <button type="submit">РАССЧИТАТЬ →</button>
             </form>
-
-            <div class="music-player">
-                <button type="button" id="musicBtn" class="music-btn">MUSIC (2STEP)</button>
-            </div>
         </div>
     </div>
-
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/12/14/audio_9e9c9b8b8e.mp3?filename=uk-garage-2step-125bpm-125416.mp3" type="audio/mpeg">
-    </audio>
-
-    <script>
-        const audio = document.getElementById('bgMusic');
-        const btn = document.getElementById('musicBtn');
-        let playing = false;
-
-        btn.addEventListener('click', () => {
-            if (playing) {
-                audio.pause();
-                btn.classList.remove('active');
-                playing = false;
-                btn.textContent = 'MUSIC (2STEP)';
-            } else {
-                audio.play().then(() => {
-                    playing = true;
-                    btn.classList.add('active');
-                    btn.textContent = '♫ 2STEP PLAYING';
-                }).catch(err => {
-                    console.error('Ошибка воспроизведения:', err);
-                    btn.textContent = '❌ MUSIC ERROR';
-                    setTimeout(() => {
-                        if (!playing) btn.textContent = 'MUSIC (2STEP)';
-                    }, 2000);
-                });
-            }
-        });
-    </script>
 </body>
 </html>
 """
@@ -347,41 +305,67 @@ RESULT_HTML = """
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
-            background: radial-gradient(circle at 20% 40%, #221c0c, #050301);
+            background: radial-gradient(circle at 20% 40%, #0a0502, #020100);
             font-family: 'Heebo', 'Times New Roman', serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
+            position: relative;
+        }}
+        body::after {{
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMTgiLz48L3N2Zz4=');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 1;
+        }}
+        .vignette {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 180px 70px rgba(0,0,0,0.7);
+            pointer-events: none;
+            z-index: 2;
         }}
         .result-card {{
-            background: rgba(12, 10, 8, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 48px;
+            position: relative;
+            z-index: 10;
+            background: rgba(8, 7, 5, 0.75);
+            backdrop-filter: blur(14px);
+            border-radius: 56px;
             padding: 2rem;
             max-width: 600px;
             width: 100%;
             border: 1px solid #b88b4a;
-            box-shadow: 0 0 30px rgba(184,139,74,0.3);
-            animation: fadeIn 0.5s ease;
+            box-shadow: 0 0 35px rgba(184,139,74,0.25);
+            animation: fadeIn 0.6s ease;
         }}
         @keyframes fadeIn {{
-            from {{ opacity: 0; transform: translateY(20px); }}
+            from {{ opacity: 0; transform: translateY(25px); }}
             to {{ opacity: 1; transform: translateY(0); }}
         }}
         h1 {{
-            font-family: 'Heebo', 'Times New Roman', serif;
+            font-family: 'Heebo', sans-serif;
             font-weight: 800;
-            font-size: 2rem;
-            background: linear-gradient(135deg, #ecd9b4, #b88b4a);
+            font-size: 2.1rem;
+            background: linear-gradient(135deg, #f5e6d3, #dbb87a);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            margin-bottom: 0.3rem;
         }}
         .sub {{
             color: #d6b575;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             font-size: 0.7rem;
             margin-bottom: 1.8rem;
             border-left: 3px solid #b88b4a;
@@ -391,13 +375,14 @@ RESULT_HTML = """
         .result-row {{
             display: flex;
             justify-content: space-between;
-            padding: 0.8rem 0;
+            padding: 0.85rem 0;
             border-bottom: 1px solid rgba(184,139,74,0.3);
             color: #f0e5d0;
             font-family: 'Heebo', monospace;
+            font-size: 0.95rem;
         }}
         .total {{
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: bold;
             color: #ecd9b4;
             border-top: 2px solid #b88b4a;
@@ -409,7 +394,7 @@ RESULT_HTML = """
             background: #7a5a3a;
             text-decoration: none;
             color: #f0e5d0;
-            padding: 12px 24px;
+            padding: 12px 26px;
             border-radius: 60px;
             margin-top: 2rem;
             text-align: center;
@@ -424,9 +409,14 @@ RESULT_HTML = """
             color: #0a0703;
             transform: scale(0.98);
         }}
+        @media (max-width: 600px) {{
+            .result-card {{ padding: 1.5rem; }}
+            h1 {{ font-size: 1.7rem; }}
+        }}
     </style>
 </head>
 <body>
+    <div class="vignette"></div>
     <div class="result-card">
         <h1>FLEXTILE</h1>
         <div class="sub">// детализация</div>
